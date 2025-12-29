@@ -1,5 +1,5 @@
 spring:
-  application.name: kafka-demo
+  application.name: spring-kafka-micrometer-reproducer
   kafka:
     bootstrap-servers: localhost:9092
     consumer:
@@ -15,6 +15,7 @@ spring:
       ack-mode: record
       type: single
       client-id: ${spring.application.name}-listener
+      observation-enabled: true
 
 server:
   port: 8080
