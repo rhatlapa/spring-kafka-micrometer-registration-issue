@@ -1,0 +1,48 @@
+spring:
+  application.name: kafka-demo
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: ${spring.application.name}
+      client-id: ${spring.application.name}-consumer
+      auto-offset-reset: earliest
+      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+        spring.deserializer.value.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+    listener:
+      ack-mode: record
+      type: single
+      client-id: ${spring.application.name}-listener
+
+server:
+  port: 8080
+  ssl.enabled: false
+  shutdown: graceful
+
+management:
+  server:
+    port: 8079
+    ssl.enabled: false
+  health:
+    diskspace.enabled: false
+  endpoint:
+    prometheus.access: unrestricted
+    health.show-details: always
+  endpoints.web.exposure.include: "*"
+  metrics:
+    tags.application: ${spring.application.name}
+    distribution.percentiles-histogram.api.resource: true
+  observations.http.server.requests.name: api.resource
+  prometheus.metrics.export.enabled: true
+  tracing.propagation.produce: w3c,b3_multi
+
+extended:
+  kafka.listeners:
+    first:
+      concurrency: 2
+      client-id: ${spring.application.name}-first-listener
+    second:
+      concurrency: 2
+      client-id: ${spring.application.name}-second-listener
