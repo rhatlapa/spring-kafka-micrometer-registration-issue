@@ -9,11 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.ssl.SslBundles;
-import org.springframework.kafka.config.KafkaStreamsConfiguration;
 
 import lombok.Data;
 
-@ConfigurationProperties("extended.kafka")
+@ConfigurationProperties(prefix = "extended.kafka")
 @Data
 public class ExtendedKafkaProperties {
 
@@ -26,7 +25,6 @@ public class ExtendedKafkaProperties {
 	private Map<String, KafkaProperties.Consumer> consumers = new HashMap<>();
 	private Map<String, KafkaProperties.Producer> producers = new HashMap<>();
 	private Map<String, KafkaProperties.Listener> listeners = new HashMap<>();
-	private Map<String, KafkaProperties.Streams> streams = new HashMap<>();
 
 	@Autowired
 	public ExtendedKafkaProperties(KafkaProperties kafkaProperties, SslBundles sslBundles) {
@@ -90,18 +88,6 @@ public class ExtendedKafkaProperties {
 				.map(producer -> producer.buildProperties(sslBundles))
 				.ifPresent(properties::putAll);
 		return properties;
-	}
-
-	public Map<String, Object> buildStreamsProperties(String configKey) {
-		Map<String, Object> properties = kafkaProperties.buildStreamsProperties(sslBundles);
-		Optional.ofNullable(streams.get(configKey))
-				.map(streams -> streams.buildProperties(sslBundles))
-				.ifPresent(properties::putAll);
-		return properties;
-	}
-
-	public KafkaStreamsConfiguration buildStreamsConfiguration(String configKey) {
-		return new KafkaStreamsConfiguration(buildStreamsProperties(configKey));
 	}
 
 	public KafkaProperties.Listener getListener() {

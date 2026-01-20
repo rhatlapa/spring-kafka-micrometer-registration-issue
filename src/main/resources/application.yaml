@@ -18,13 +18,13 @@ spring:
       observation-enabled: true
 
 server:
-  port: 8080
+  port: 9080
   ssl.enabled: false
   shutdown: graceful
 
 management:
   server:
-    port: 8079
+    port: 9079
     ssl.enabled: false
   health:
     diskspace.enabled: false
@@ -40,10 +40,16 @@ management:
   tracing.propagation.produce: w3c,b3_multi
 
 extended:
-  kafka.listeners:
-    first:
-      concurrency: 2
-      client-id: ${spring.application.name}-first-listener
-    second:
-      concurrency: 2
-      client-id: ${spring.application.name}-second-listener
+  kafka:
+    listeners:
+      first:
+        concurrency: 2
+        client-id: ${spring.application.name}-first-listener
+      second:
+        concurrency: 2
+        client-id: ${spring.application.name}-second-listener
+    producers:
+      first:
+        client-id: ${spring.application.name}-first-producer
+      second:
+        client-id: ${spring.application.name}-second-producer

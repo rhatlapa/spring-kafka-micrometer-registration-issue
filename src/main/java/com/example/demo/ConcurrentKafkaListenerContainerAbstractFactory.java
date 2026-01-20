@@ -16,6 +16,7 @@ public class ConcurrentKafkaListenerContainerAbstractFactory {
 	private final ExtendedKafkaProperties extendedKafkaProperties;
 	private final CommonErrorHandler errorHandler;
 
+
 	public ConcurrentKafkaListenerContainerAbstractFactory(ExtendedKafkaProperties extendedKafkaProperties) {
 		this.extendedKafkaProperties = extendedKafkaProperties;
 		this.errorHandler = new DefaultErrorHandler();
